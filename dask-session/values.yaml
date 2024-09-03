@@ -1,0 +1,11 @@
+dask: 
+  image: "daskgateway/dask-worker:latest"
+  gateway_url: "http://traefik-dask-gateway.dask-gateway.svc.cluster.local:80"
+  worker_image: "daskgateway/dask-worker:latest"
+  session:
+    limits:
+      cpu: "2"
+      memory: "8G"
+    requests:
+      cpu: "1"
+      memory: "4G"

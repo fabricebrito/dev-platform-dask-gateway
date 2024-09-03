@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dask-session
+  labels:
+    app: dask-session
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dask-session
+  template:
+    metadata:
+      labels:
+        app: dask-session
+    spec:
+      containers:
+        - name: dask-client
+          image: {{ .Values.dask.image }}
+          command: ["sleep", "infinity"]
+          resources:
+            limits:
+              cpu: "{{ .Values.dask.session.limits.cpu }}"
+              memory: "{{ .Values.dask.session.limits.memory }}"
+            requests:
+              cpu: "{{ .Values.dask.session.requests.cpu }}"
+              memory: "{{ .Values.dask.session.requests.memory }}"
+          env:
+            - name: DASK_GATEWAY_URL
+              value: "{{ .Values.dask.gateway_url }}"
+            - name: DASK_WORKER_IMAGE
+              value: "{{ .Values.dask.worker_image }}"

@@ -1,0 +1,28 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: bai
+
+build:
+  artifacts:
+    - image: bai
+      context: bai
+      docker:
+        dockerfile: Dockerfile
+
+deploy:
+  helm:
+    releases:
+      - name: app-package-bai
+        chartPath: bai-chart
+        namespace: dask-gateway
+        setValueTemplates:
+          daskWorkerImage: "{{.IMAGE_NAME_bai}}:{{.IMAGE_TAG_bai}}"
+          dockerPull: "{{.IMAGE_NAME_bai}}:{{.IMAGE_TAG_bai}}"
+          daskGatewayUrl: "http://traefik-dask-gateway.dask-gateway.svc.cluster.local:80"
+          pvc.storage: 10Gi
+          pvc.storageClassName: standard
+          resources.limits.cpu: "2"
+          resources.limits.memory: "1024Mi"
+          resources.requests.cpu: "1"
+          resources.requests.memory: "512Mi"

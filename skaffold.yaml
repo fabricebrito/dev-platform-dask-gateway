@@ -1,0 +1,50 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: dask-gateway
+
+build:
+  artifacts:
+    - image: worker
+      context: .
+      docker:
+        dockerfile: Dockerfile.worker
+    - image: daskclient
+      context: .
+      docker:
+        dockerfile: Dockerfile.client
+
+deploy:
+  helm:
+    releases:
+      - name: dask-gateway
+        remoteChart: https://helm.dask.org/dask-gateway-2024.1.0.tgz
+        namespace: dask-gateway
+        createNamespace: true
+        valuesFiles:
+          - dask-gateway/values.yaml
+        setValueTemplates:
+          gateway.backend.image.name: "{{.IMAGE_NAME_worker}}"
+          gateway.backend.image.tag: "{{.IMAGE_TAG_worker}}"
+          traefik.service.type: "ClusterIP"
+
+      - name: dask-session
+        chartPath: dask-session
+        namespace: dask-gateway
+        setValueTemplates:
+          dask.image: "{{.IMAGE_NAME_daskclient}}:{{.IMAGE_TAG_daskclient}}"
+          dask.worker_image: "{{.IMAGE_NAME_worker}}:{{.IMAGE_TAG_worker}}"
+          dask.gateway_url: "http://traefik-dask-gateway.dask-gateway.svc.cluster.local:80"
+    hooks:
+      before: []
+      after:
+        - host:
+            command: ["sh", "-c", "./wait-for-it.sh"]
+            os: [darwin, linux]
+
+portForward:
+- resourceType: service
+  resourceName: traefik-dask-gateway
+  namespace: dask-gateway
+  port: 80
+  localPort: 8001
