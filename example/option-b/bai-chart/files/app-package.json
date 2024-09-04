@@ -1,0 +1,114 @@
+{
+  "cwlVersion": "v1.0",
+  "$namespaces": {
+    "s": "https://schema.org/"
+  },
+  "s:softwareVersion": "1.0.0",
+  "schemas": [
+    "http://schema.org/version/9.0/schemaorg-current-http.rdf"
+  ],
+  "$graph": [
+    {
+      "class": "Workflow",
+      "id": "main",
+      "label": "Burned area intensity",
+      "doc": "Burned area intensity",
+      "requirements": [],
+      "inputs": {
+        "pre_event": {
+          "label": "pre-event STAC item",
+          "doc": "pre-event STAC item",
+          "type": "string"
+        },
+        "post_event": {
+          "label": "post-event STAC item",
+          "doc": "post-event STAC item",
+          "type": "string"
+        }
+      },
+      "outputs": [
+        {
+          "id": "bai",
+          "outputSource": [
+            "node_bai/burned_area_intensity"
+          ],
+          "type": "File"
+        }
+      ],
+      "steps": {
+        "node_bai": {
+          "run": "#bai",
+          "in": {
+            "pre_event": "pre_event",
+            "post_event": "post_event"
+          },
+          "out": [
+            "burned_area_intensity"
+          ]
+        }
+      }
+    },
+    {
+      "class": "CommandLineTool",
+      "id": "bai",
+      "requirements": {
+        "InlineJavascriptRequirement": {},
+        "EnvVarRequirement": {
+          "envDef": {
+            "PYTHONPATH": "/app"
+          }
+        },
+        "ResourceRequirement": {
+          "coresMax": 1,
+          "ramMax": 512
+        },
+        "InitialWorkDirRequirement": {
+          "listing": [
+            {
+              "entryname": "gateway.yaml",
+              "entry": "gateway:\n  address: \"{{ .Values.daskGatewayUrl }}\"\n\n  cluster:\n    options: \n      image: \"{{ .Values.daskWorkerImage }}\"\n      worker_cores: 0.5\n      worker_cores_limit: 1\n      worker_memory: \"4 G\"\n    \n"
+            },
+            {
+              "entryname": "procure.py",
+              "entry": "# this code is responsible for creating a Dask cluster\n# it's executed by the CWL runner in the context of the Dask Gateway extension\n# this is for the prototyping purposes only\nimport os\nfrom dask_gateway import Gateway\n\ngateway = Gateway()\n\ncluster = gateway.new_cluster(shutdown_on_close=False)\ncluster.scale(4)\n# save the cluster name to a file\nwith open(\"dask_cluster_name.txt\", \"w\") as f:\n  f.write(cluster.name)\n#"
+            },
+            {
+              "entryname": "shutdown.py",
+              "entry": "# this code is responsible for dismissing a Dask cluster\n# it's executed by the CWL runner in the context of the Dask Gateway extension\n# this is for the prototyping purposes only\nimport os\nfrom dask_gateway import Gateway\n\ngateway = Gateway()\n\ncluster = gateway.connect(os.environ[\"DASK_GATEWAY_CLUSTER\"])\n\ncluster.shutdown()"
+            },
+            {
+              "entryname": "run.sh",
+              "entry": "#!/bin/bash\n\n# this is done by the CWL runner in the context of the Dask Gateway extension\n# as a preparation for the execution of the main script\n# this is for the prototyping purposes only\n\nset -x\nrm -f $HOME/.config/dask/gateway.yaml\nmkdir -p /etc/dask\n#mkdir -p $HOME/.config/dask\ncp -v gateway.yaml /etc/dask/gateway.yaml\n#cp -v gateway.yaml $HOME/.config/dask/gateway.yaml\n#chmod 600 $HOME/.config/dask/gateway.yaml\nchmod 600 /etc/dask/gateway.yaml\ncat /etc/dask/gateway.yaml\n\n#cat $HOME/.config/dask/gateway.yaml\n\npython procure.py\nexport DASK_GATEWAY_CLUSTER=` cat dask_cluster_name.txt `\n\n# this is executed as usual by the CWL runner\npython -m app --pre_fire_url $( inputs.pre_event ) --post_fire_url $( inputs.post_event )\n\n# this is done by the CWL runner in the context of the Dask Gateway extension\n# as a post step after the execution of the main script\n# this is for the prototyping purposes only\npython shutdown.py\n\n#"
+            }
+          ]
+        }
+      },
+      "hints": {
+        "DockerRequirement": {
+          "dockerPull": "{{ .Values.daskWorkerImage }}"
+        }
+      },
+      "baseCommand": [
+        "/bin/sh",
+        "run.sh"
+      ],
+      "arguments": [],
+      "inputs": {
+        "pre_event": {
+          "type": "string"
+        },
+        "post_event": {
+          "type": "string"
+        }
+      },
+      "outputs": {
+        "burned_area_intensity": {
+          "outputBinding": {
+            "glob": "bai.tif"
+          },
+          "type": "File"
+        }
+      }
+    }
+  ]
+}
