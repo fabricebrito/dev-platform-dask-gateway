@@ -68,7 +68,23 @@ $graph:
                 gateway = Gateway()
 
                 cluster = gateway.new_cluster(shutdown_on_close=False)
-                cluster.scale(4)
+
+                # resource requirements
+                worker_cores = 0.5
+                worker_cores_limit = 1 # would come from DaskGateway.Requirement.ResourceRequirement.worker_cores_limit (or worker_cores)
+                worker_memory = 4 # would come from DaskGateway.Requirement.ResourceRequirement.worker_memory
+                print(f"Resource requirements: {worker_cores} cores, {worker_memory} GB RAM")
+
+                # scale cluster
+                max_cores = 5 # would come from DaskGateway.Requirement.ResourceRequirement.max_cores
+                max_ram = 16  # would come from DaskGateway.Requirement.ResourceRequirement.max_ram
+                print(f"Resource limits: {max_cores} cores, {max_ram} GB RAM")
+
+                workers = min(max_cores // worker_cores_limit, max_ram // worker_memory)
+                print(f"Scaling cluster to {workers} workers")
+                cluster.scale(workers)
+
+
                 # save the cluster name to a file
                 with open("dask_cluster_name.txt", "w") as f:
                   f.write(cluster.name)

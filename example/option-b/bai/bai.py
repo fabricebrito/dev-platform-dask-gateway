@@ -110,8 +110,6 @@ if __name__ == "__main__":
     cluster = gateway.connect(cluster_name=os.environ["DASK_GATEWAY_CLUSTER"])
 
     try:
-        logger.info("Adapting cluster: minimum=4, maximum=5")
-        #cluster.adapt(minimum=4, maximum=5)
         client = cluster.get_client()
         logger.info(f"Dask Dashboard: {client.dashboard_link}")
         logger.info("Running the burned area intensity")
@@ -121,8 +119,3 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error("Failed to run the script: {}", e)
         logger.error(traceback.format_exc())
-
-    finally:
-        client.close()
-        cluster.close()
-        logger.info("Dask cluster closed and shutdown!")

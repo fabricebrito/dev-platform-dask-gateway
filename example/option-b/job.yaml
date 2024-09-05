@@ -4,7 +4,7 @@ kind: Job
 metadata:
   name: calrissian-bai
 spec:
-  #ttlSecondsAfterFinished: 60
+  ttlSecondsAfterFinished: 180
   template:
     spec:
       serviceAccountName: calrissian-sa
