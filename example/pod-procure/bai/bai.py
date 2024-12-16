@@ -109,8 +109,9 @@ if __name__ == "__main__":
 
     gateway = Gateway()
 
-    with open("/shared/dask_cluster_name.txt", "r") as f:
-        cluster_name = f.read().strip()
+    # with open("/shared/dask_cluster_name.txt", "r") as f:
+    #     cluster_name = f.read().strip()
+    cluster_name = os.environ.get("DASK_CLUSTER")
 
     logger.info(f"Connecting to the Dask cluster: {cluster_name}")
 
