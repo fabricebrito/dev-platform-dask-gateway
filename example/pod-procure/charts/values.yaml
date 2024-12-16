@@ -1,0 +1,7 @@
+
+daskWorkerImage: "docker.io/library/bai:489b5ac2077040a720a051cce7e1d22ed118844a9aaa3515e7ea2e6c32765d2b"
+
+daskGatewayUrl: "http://traefik-dask-gateway.dask-gateway.svc.cluster.local:80"
+
+daskGatewayProcureImage: ""
+

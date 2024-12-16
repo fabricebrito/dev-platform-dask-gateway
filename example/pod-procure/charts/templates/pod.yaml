@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dask-cluster-with-cleanup
+spec:
+  restartPolicy: Never
+  volumes:
+  - name: shared-data
+    emptyDir: {}  # Shared volume between containers
+  # mount the config map with the Dask Gateway config
+  - name: dask-gateway-config
+    configMap:
+      name: dask-gateway-config
+  - name: dask-gateway-config-1
+    configMap:
+      name: dask-gateway-config
+  initContainers:
+  - name: init-dask-cluster
+    image: {{ .Values.daskGatewayProcureImage }}
+    env: 
+    - name: PYTHONPATH
+      value: "/app"
+    command:
+      - python
+      - /app/init-dask.py
+      - --target
+      - /shared/dask_cluster_name.txt
+    volumeMounts:
+    - name: shared-data
+      mountPath: /shared
+    - name: dask-gateway-config
+      mountPath: /etc/dask
+
+  containers:
+  - name: main-container
+    image: {{ .Values.daskWorkerImage }}
+    
+    env: 
+    - name: PYTHONPATH
+      value: "/app"
+    command:
+      - sh
+      - -c
+      - |
+        python -m app --pre_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2B_10TFK_20210713_0_L2A" --post_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2A_10TFK_20210718_0_L2A" && touch /shared/completed
+    volumeMounts:
+    - name: shared-data
+      mountPath: /shared
+    - name: dask-gateway-config
+      mountPath: /etc/dask
+
+  - name: sidecar-cleanup
+    image: {{ .Values.daskWorkerImage }}
+
+    env: 
+    - name: PYTHONPATH
+      value: "/app"
+    command:
+      - python
+      - -c
+      - |
+        import time, os, sys
+        from loguru import logger
+        from dask_gateway import Gateway
+
+        completion_file = "/shared/completed"
+        logger.info("Sidecar: Waiting for completion signal from main container...")
+
+        # Poll for the existence of the completion file
+        while not os.path.exists(completion_file):
+            logger.info("Sidecar: Waiting for completion signal from main container...")
+            time.sleep(5)
+
+        logger.info("Sidecar: Completion signal received. Shutting down Dask cluster...")
+
+        # Shut down the Dask cluster
+        with open("/shared/dask_cluster_name.txt", "r") as f:
+            cluster_name = f.read().strip()
+        
+        gateway = Gateway()
+        cluster = gateway.connect(cluster_name)
+        logger.info(f"Sidecar: Connected to Dask cluster: {cluster_name}")
+        cluster.shutdown()
+        logger.info("Sidecar: Dask cluster shut down successfully.")
+        sys.exit(0)
+    volumeMounts:
+    - name: shared-data
+      mountPath: /shared
+    - name: dask-gateway-config-1 # it doesn't allow mounting the same config map twice
+      mountPath: /etc/dask
