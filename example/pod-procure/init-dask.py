@@ -37,7 +37,10 @@ cluster_options['image'] = image
 cluster_options['worker_cores'] = worker_cores
 cluster_options['worker_cores_limit'] = worker_cores_limit
 cluster_options['worker_memory'] = f"{worker_memory} G"
+#cluster_options["worker_extra_pod_labels"] = {"group": "dask"}
 
+logger.info(f"Cluster options: {cluster_options}")
+logger.info(dir(cluster_options))
 cluster = gateway.new_cluster(cluster_options, shutdown_on_close=False)
 
 # resource requirements

@@ -9,7 +9,7 @@ fields:
     doc: "Always 'DaskGatewayRequirement'"
     jsonldPredicate:
       "_id": "@type"
-      "_type": "@vocab"
+      "_type": "@vocab"    
   ResourceRequirement:
     type: record
     doc: "Indicates the runtime cluster requirements."
