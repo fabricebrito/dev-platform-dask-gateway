@@ -17,8 +17,8 @@ deploy:
         chartPath: bai-chart
         namespace: dask-gateway
         setValueTemplates:
-          daskWorkerImage: "{{.IMAGE_NAME_bai}}:{{.IMAGE_TAG_bai}}"
-          dockerPull: "{{.IMAGE_NAME_bai}}:{{.IMAGE_TAG_bai}}"
+          daskWorkerImage: "{{.IMAGE_REPO_bai}}:{{.IMAGE_TAG_bai}}"
+          dockerPull: "{{.IMAGE_REPO_bai}}:{{.IMAGE_TAG_bai}}"
           daskGatewayUrl: "http://traefik-dask-gateway.dask-gateway.svc.cluster.local:80"
           pvc.storage: 10Gi
           pvc.storageClassName: standard

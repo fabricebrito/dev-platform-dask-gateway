@@ -1,5 +1,7 @@
 FROM docker.io/python:3.10-slim-bullseye
 
+RUN apt update && apt-get install -y libexpat1
+
 ADD requirements.txt /tmp/requirements.txt
 
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && \
