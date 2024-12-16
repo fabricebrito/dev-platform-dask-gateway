@@ -8,12 +8,11 @@ spec:
   - name: shared-data
     emptyDir: {}  # Shared volume between containers
   # mount the config map with the Dask Gateway config
+  # for the main container
   - name: dask-gateway-config
     configMap:
       name: dask-gateway-config
-  - name: dask-gateway-config-1
-    configMap:
-      name: dask-gateway-config
+
   initContainers:
   - name: init-dask-cluster
     image: {{ .Values.daskGatewayProcureImage }}
@@ -25,11 +24,23 @@ spec:
       - /app/init-dask.py
       - --target
       - /shared/dask_cluster_name.txt
+      - --gateway-url
+      - {{ .Values.daskGatewayUrl }}
+      - --image
+      - {{ .Values.daskWorkerImage }}
+      - --worker-cores
+      - "0.5"
+      - --worker-memory
+      - "2"
+      - --worker-cores-limit
+      - "1"
+      - --max-cores 
+      - "5"
+      - --max-ram
+      - "16"
     volumeMounts:
     - name: shared-data
       mountPath: /shared
-    - name: dask-gateway-config
-      mountPath: /etc/dask
 
   containers:
   - name: main-container
@@ -42,7 +53,11 @@ spec:
       - sh
       - -c
       - |
-        python -m app --pre_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2B_10TFK_20210713_0_L2A" --post_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2A_10TFK_20210718_0_L2A" && touch /shared/completed
+        set -e  # Exit immediately if any command fails
+        trap 'touch /shared/completed' EXIT  # Always touch the signal file when the container exits
+        python -m app \
+          --pre_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2B_10TFK_20210713_0_L2A" \
+          --post_fire_url "https://earth-search.aws.element84.com/v0/collections/sentinel-s2-l2a-cogs/items/S2A_10TFK_20210718_0_L2A"
     volumeMounts:
     - name: shared-data
       mountPath: /shared
@@ -60,11 +75,12 @@ spec:
       - /app/dispose-dask.py
       - --source
       - /shared/dask_cluster_name.txt
+      - --gateway-url
+      - {{ .Values.daskGatewayUrl }}
       - --signal
       - /shared/completed        
 
     volumeMounts:
     - name: shared-data
       mountPath: /shared
-    - name: dask-gateway-config-1 # it doesn't allow mounting the same config map twice
-      mountPath: /etc/dask
+
