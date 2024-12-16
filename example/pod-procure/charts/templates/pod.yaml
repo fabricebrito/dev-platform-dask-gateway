@@ -50,39 +50,19 @@ spec:
       mountPath: /etc/dask
 
   - name: sidecar-cleanup
-    image: {{ .Values.daskWorkerImage }}
+    image: {{ .Values.daskGatewayProcureImage }}
 
     env: 
     - name: PYTHONPATH
       value: "/app"
     command:
-      - python
-      - -c
-      - |
-        import time, os, sys
-        from loguru import logger
-        from dask_gateway import Gateway
+      -  python
+      - /app/dispose-dask.py
+      - --source
+      - /shared/dask_cluster_name.txt
+      - --signal
+      - /shared/completed        
 
-        completion_file = "/shared/completed"
-        logger.info("Sidecar: Waiting for completion signal from main container...")
-
-        # Poll for the existence of the completion file
-        while not os.path.exists(completion_file):
-            logger.info("Sidecar: Waiting for completion signal from main container...")
-            time.sleep(5)
-
-        logger.info("Sidecar: Completion signal received. Shutting down Dask cluster...")
-
-        # Shut down the Dask cluster
-        with open("/shared/dask_cluster_name.txt", "r") as f:
-            cluster_name = f.read().strip()
-        
-        gateway = Gateway()
-        cluster = gateway.connect(cluster_name)
-        logger.info(f"Sidecar: Connected to Dask cluster: {cluster_name}")
-        cluster.shutdown()
-        logger.info("Sidecar: Dask cluster shut down successfully.")
-        sys.exit(0)
     volumeMounts:
     - name: shared-data
       mountPath: /shared
