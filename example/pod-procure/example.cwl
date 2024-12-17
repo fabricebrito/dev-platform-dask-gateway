@@ -5,14 +5,20 @@ class: CommandLineTool
 label: Example
 doc: Example
 
-requirements:
-  
-  SchemaDefRequirement:
-    types:
-    - $import: https://raw.githubusercontent.com/fabricebrito/dev-platform-dask-gateway/refs/heads/main/example/pod-procure/schema.yaml
+$namespaces:
+  dask: "https://www.terradue.com/dask/schema#"
 
-  DaskGatewayRequirement:
-    type: https://raw.githubusercontent.com/fabricebrito/dev-platform-dask-gateway/refs/heads/main/example/pod-procure/schema.yaml#SchemaDefRequirement
+$schemas:
+    - https://raw.githubusercontent.com/fabricebrito/dev-platform-dask-gateway/refs/heads/main/example/pod-procure/schema.yaml
+
+requirements:
+  dask:DaskGatewayRequirement:
+    class: DaskGatewayRequirement
+    workerCores: 2
+    workerCoresLimit: "4"
+    workerMemory: 1073741824   # 1 GiB in bytes
+    coresMax: "8"
+    ramMax: "16Gi"
 
 inputs:
   post_event:
