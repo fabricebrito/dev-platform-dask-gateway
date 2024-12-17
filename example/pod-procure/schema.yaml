@@ -16,43 +16,33 @@ $graph:
       jsonldPredicate:
         "_id": "@type"
         "_type": "@vocab"
-    ResourceRequirement:
-      type: record
-      doc: "Indicates the runtime cluster requirements."
-      fields:
-        class:
-          type: 'string'
-          doc: "Always 'DaskGatewayRequirement'"
-          jsonldPredicate:
-            "_id": "@type"
-            "_type": "@vocab"
-      workerCores:
-        type:
-          - 'int'
-          - 'cwl:Expression'
-        doc: |
-          Number of cpu-cores available for a dask worker.
-      workerCoresLimit:
-        type:
-          - 'string'
-          - 'cwl:Expression'
-        doc: |
-          Maximum number of cpu-cores available for a dask worker.
-      workerMemory:
-        type:
-          - 'int'
-          - 'cwl:Expression'
-        doc: |
-          Maximum number of bytes available for a dask worker.
-      coresMax:
-        type:
-          - 'string'
-          - 'cwl:Expression'
-        doc: |
-          Maximum number of cores to configure the cluster
-      ramMax:
-        type:
-          - 'string'
-          - 'cwl:Expression'
-        doc: |
-          Maximum amount of memory to configure the cluster
+    workerCores:
+      type:
+        - 'int'
+        - 'cwl:Expression'
+      doc: |
+        Number of cpu-cores available for a dask worker.
+    workerCoresLimit:
+      type:
+        - 'string'
+        - 'cwl:Expression'
+      doc: |
+        Maximum number of cpu-cores available for a dask worker.
+    workerMemory:
+      type:
+        - 'int'
+        - 'cwl:Expression'
+      doc: |
+        Maximum number of bytes available for a dask worker.
+    coresMax:
+      type:
+        - 'string'
+        - 'cwl:Expression'
+      doc: |
+        Maximum number of cores to configure the cluster
+    ramMax:
+      type:
+        - 'string'
+        - 'cwl:Expression'
+      doc: |
+        Maximum amount of memory to configure the cluster
