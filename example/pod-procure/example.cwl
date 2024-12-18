@@ -13,7 +13,6 @@ requirements:
     processes: 3
 
   cwltool:DaskGatewayRequirement:
-    class: org.commonwl.cwltool.DaskGatewayRequirement
     workerCores: 2
     workerCoresLimit: "4"
     workerMemory: 1073741824   # 1 GiB in bytes
