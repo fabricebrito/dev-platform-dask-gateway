@@ -41,10 +41,10 @@ cluster name: implemented with the cluster name in a text file: `/shared/dask_cl
 
 ```yaml
 DaskGatewayRequirement:
-    ResourceRequirement:
-        workerCores: 0.5
-        workerCoresLimit: 1
-        workerMemory: 2
-        coresMax: 5
-        ramMax: 16
+    dockerPull: <image>
+    workerCores: 0.5
+    workerCoresLimit: 1
+    workerMemory: 2
+    coresMax: 5
+    ramMax: 16
 ```

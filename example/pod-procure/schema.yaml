@@ -1,4 +1,4 @@
-$base: "https://www.terradue.com/dask/schema#"
+$base: "https://dask.org/cwl#"
 $namespaces:
   cwl: "https://w3id.org/cwl/cwl#"
 $graph:
