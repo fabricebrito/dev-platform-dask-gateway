@@ -6,14 +6,14 @@ label: Example
 doc: Example
 
 $namespaces:
-  dask: "https://www.terradue.com/dask/schema#"
-
-$schemas:
-    - https://raw.githubusercontent.com/fabricebrito/dev-platform-dask-gateway/refs/heads/main/example/pod-procure/schema.yaml
+  cwltool: http://commonwl.org/cwltool#
 
 requirements:
-  dask:DaskGatewayRequirement:
-    class: DaskGatewayRequirement
+  cwltool:MPIRequirement:
+    processes: 3
+
+  cwltool:DaskGatewayRequirement:
+    class: org.commonwl.cwltool.DaskGatewayRequirement
     workerCores: 2
     workerCoresLimit: "4"
     workerMemory: 1073741824   # 1 GiB in bytes
