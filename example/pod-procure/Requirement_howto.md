@@ -79,7 +79,7 @@ vim cwltool/process.py
 [add "http://commonwl.org/cwltool#DaskGatewayRequirement" in the 'supportedProcessRequirements' list]
 ```
 
-The reinstall the tool
+Then reinstall the tool
 
 ```
 pip install -e .
