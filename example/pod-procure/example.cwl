@@ -7,12 +7,14 @@ doc: Example
 
 $namespaces:
   cwltool: http://commonwl.org/cwltool#
+  dask: https://dask.org/#
 
 requirements:
-  cwltool:MPIRequirement:
-    processes: 3
+  # cwltool:MPIRequirement:
+  #   processes: 3
 
-  cwltool:DaskGatewayRequirement:
+
+  dask:DaskGatewayRequirement:
     workerCores: 2
     workerCoresLimit: "4"
     workerMemory: 1073741824   # 1 GiB in bytes
