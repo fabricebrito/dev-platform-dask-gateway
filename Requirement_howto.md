@@ -53,8 +53,33 @@ vim extensions.yml
 cd ../
 git clone git@github.com:common-workflow-language/cwl-utils.git
 cd cwl-utils/
-schema-salad-tool --codegen python ../cwl-v1.2/extensions.yml --codegen-parser-info "org.w3id.cwl.v1_2" > cwl_utils/parser/cwl_v1_2.py
-pip install -e .
+vim Makefile
+```
+
+change line `206` from
+
+```
+cwl_utils/parser/cwl_v1_2.py: FORCE
+  schema-salad-tool --codegen python \
+    --codegen-parser-info "org.w3id.cwl.v1_2" \
+    https://github.com/common-workflow-language/cwl-v1.2/raw/codegen/extensions.yml \
+    > $@
+```
+
+to
+
+```
+cwl_utils/parser/cwl_v1_2.py: FORCE
+  schema-salad-tool --codegen python \
+    --codegen-parser-info "org.w3id.cwl.v1_2" \
+    ../cwl-v1.2/extensions.yml \
+    > $@
+```
+
+then
+
+```
+make cwl_utils/parser/cwl_v1_2.py all
 ```
 
 ## Enable the extension in the cwltool
@@ -92,7 +117,7 @@ setup.py
 Then reinstall the tool
 
 ```
-pip install -e .
+make all
 ```
 
 ## Verify the extension is working
