@@ -78,3 +78,17 @@ Enable the extension via the FQN:
 vim cwltool/process.py
 [add "http://commonwl.org/cwltool#DaskGatewayRequirement" in the 'supportedProcessRequirements' list]
 ```
+
+The reinstall the tool
+
+```
+pip install -e .
+```
+
+## Verify the extention is working
+
+```
+cd ../
+cd dev-platform-dask-gateway/example/pod-procure
+cwltool --enable-ext --validate --debug example.cwl
+```
