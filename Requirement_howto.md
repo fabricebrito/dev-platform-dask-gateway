@@ -85,7 +85,7 @@ Then reinstall the tool
 pip install -e .
 ```
 
-## Verify the extention is working
+## Verify the extension is working
 
 ```
 cd ../
