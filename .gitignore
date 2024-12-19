@@ -1,3 +1,5 @@
 env_test_dask
 *.tif
 .project
+.pydevproject
+target

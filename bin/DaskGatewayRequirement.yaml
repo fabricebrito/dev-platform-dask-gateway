@@ -1,0 +1,30 @@
+- name: DaskGatewayRequirement
+  type: record
+  extends: cwl:ProcessRequirement
+  inVocab: false
+  doc: "Indicates that a process requires a [Dask Gateway](https://gateway.dask.org/) runtime."
+  fields:
+    class:
+      type: string
+      doc: 'cwltool:DaskGatewayRequirement'
+      jsonldPredicate:
+        "_id": "@type"
+        "_type": "@vocab"
+    workerCores:
+      type:
+        - 'int'
+        - 'cwl:Expression'
+      doc: |
+        Number of cpu-cores available for a Dask worker.
+    workerCoresLimit:
+      type:
+        - 'string'
+        - 'cwl:Expression'
+      doc: |
+        Maximum number of cpu-cores available for a Dask worker.
+    workerMemory:
+      type:
+        - 'int'
+        - 'cwl:Expression'
+      doc: |
+        Maximum number of bytes available for a Dask worker.
