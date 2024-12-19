@@ -114,7 +114,7 @@ requirements.txt
 setup.py
 ```
 
-Removes previously installed `cwltool` versions, then reinstall it:
+Remove previously installed `cwltool` versions, then reinstall it:
 
 ```
 sudo rm -rf /usr/lib/python3/dist-packages/cwltool/
