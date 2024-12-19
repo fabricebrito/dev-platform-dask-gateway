@@ -10,16 +10,15 @@ $namespaces:
   dask: https://dask.org/#
 
 requirements:
-  # cwltool:MPIRequirement:
-  #   processes: 3
+  cwltool:MPIRequirement:
+   processes: 3
 
-
-  dask:DaskGatewayRequirement:
+  cwltool:DaskGatewayRequirement:
     workerCores: 2
-    workerCoresLimit: "4"
+    workerCoresLimit: "4GiB"
     workerMemory: 1073741824   # 1 GiB in bytes
-    coresMax: "8"
-    ramMax: "16Gi"
+    #coresMax: "8"
+    #ramMax: "16Gi"
 
 inputs:
   post_event:

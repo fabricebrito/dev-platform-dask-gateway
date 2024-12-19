@@ -79,6 +79,16 @@ vim cwltool/process.py
 [add "http://commonwl.org/cwltool#DaskGatewayRequirement" in the 'supportedProcessRequirements' list]
 ```
 
+Not required, but just for the sake of better `cwl-utils` version binding, put `cwl-utils>=0.36` in following files:
+
+```
+cwltool/main.py
+mypy-requirements.txt
+pyproject.toml
+requirements.txt
+setup.py
+```
+
 Then reinstall the tool
 
 ```
