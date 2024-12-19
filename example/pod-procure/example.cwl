@@ -10,9 +10,6 @@ $namespaces:
   dask: https://dask.org/#
 
 requirements:
-  cwltool:MPIRequirement:
-   processes: 3
-
   cwltool:DaskGatewayRequirement:
     workerCores: 2
     workerCoresLimit: "4GiB"
