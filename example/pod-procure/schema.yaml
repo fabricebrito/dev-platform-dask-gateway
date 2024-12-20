@@ -1,12 +1,13 @@
 $base: "https://dask.org/cwl#"
 $namespaces:
   cwl: "https://w3id.org/cwl/cwl#"
+  dask: "https://dask.org/cwl#"
 $graph:
 - $import: https://w3id.org/cwl/CommonWorkflowLanguage.yml
 
 - name: DaskGatewayRequirement
   type: record
-  extends: cwl:DockerRequirement
+  extends: cwl:ProcessRequirement
   inVocab: true
   doc: "Indicates that a process requires a [Dask Gateway](https://gateway.dask.org/) runtime."
   fields:
