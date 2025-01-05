@@ -7,7 +7,7 @@ on:
     paths:
     # Only rebuild website when apps have changed
     - 'Dockerfile.worker'
-    - requirements.txt
+    - 'requirements.txt'
 
     
 jobs:

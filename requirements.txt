@@ -6,3 +6,4 @@ pystac
 bokeh!=3.0.*
 rioxarray
 loguru
+odc-stac[botocore]
