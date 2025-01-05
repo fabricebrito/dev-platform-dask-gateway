@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.10-slim@sha256:80619a5316afae7045a3c13371b0ee670f39bac46ea1ed35081d2bf91d6c3dbd
+FROM docker.io/library/python:3.10.12@sha256:bac3a0e0d16125977e351c861e2f4b12ecafeaa6f72431dc970d0b9155103232
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
