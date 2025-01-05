@@ -8,6 +8,7 @@ on:
     # Only rebuild website when apps have changed
     - 'Dockerfile.worker'
     - 'requirements.txt'
+    - '.github/workflows/build.yaml'
 
     
 jobs:
@@ -27,6 +28,8 @@ jobs:
       run: echo "::set-output name=version::$APP_VERSION"
 
   container-build:
+    permissions:
+      packages: write
 
     needs: version
 
