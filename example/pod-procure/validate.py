@@ -7,10 +7,10 @@ from io import StringIO
 import cwltool
 import re
 
-with open("schema.yaml") as f:
-    schema_content = f.read()
+# with open("schema.yaml") as f:
+#     schema_content = f.read()
 
-use_custom_schema("v1.2", "https://calrissian-cwl.github.io/#", schema_content)
+# use_custom_schema("v1.2", "https://calrissian-cwl.github.io/#", schema_content)
 
 def add_arv_hints():
     cwltool.command_line_tool.ACCEPTLIST_EN_RELAXED_RE = re.compile(r".*")
