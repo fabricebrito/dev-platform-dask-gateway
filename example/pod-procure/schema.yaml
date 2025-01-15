@@ -1,15 +1,15 @@
-$base: "https://dask.org/cwl#"
+$base: http://commonwl.org/cwltool#
 $namespaces:
   cwl: "https://w3id.org/cwl/cwl#"
-  dask: "https://dask.org/cwl#"
+  calrissian: "https://calrissian-cwl.github.io/#"
 $graph:
 - $import: https://w3id.org/cwl/CommonWorkflowLanguage.yml
 
-- name: DaskGatewayRequirement
+- name: calrissian:DaskGatewayRequirement
   type: record
   extends: cwl:ProcessRequirement
   inVocab: true
-  doc: "Indicates that a process requires a [Dask Gateway](https://gateway.dask.org/) runtime."
+  doc: "Indicates that a process requires a Dask cluster procured via [Dask Gateway](https://gateway.dask.org/) runtime."
   fields:
     class:
       type: 'string'
