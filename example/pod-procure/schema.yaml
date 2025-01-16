@@ -1,11 +1,10 @@
-$base: http://commonwl.org/cwltool#
+$base: https://calrissian-cwl.github.io/schema#
 $namespaces:
   cwl: "https://w3id.org/cwl/cwl#"
-  calrissian: "https://calrissian-cwl.github.io/#"
 $graph:
 - $import: https://w3id.org/cwl/CommonWorkflowLanguage.yml
 
-- name: calrissian:DaskGatewayRequirement
+- name: DaskGatewayRequirement
   type: record
   extends: cwl:ProcessRequirement
   inVocab: true

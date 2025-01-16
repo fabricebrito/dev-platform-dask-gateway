@@ -7,7 +7,7 @@ doc: Example
 
 $namespaces:
   cwltool: http://commonwl.org/cwltool#
-  calrissian: https://calrissian-cwl.github.io/#
+  calrissian: https://calrissian-cwl.github.io/schema#
 
 requirements:
   calrissian:DaskGatewayRequirement:
