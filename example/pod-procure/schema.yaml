@@ -7,7 +7,7 @@ $graph:
 - name: DaskGatewayRequirement
   type: record
   extends: cwl:ProcessRequirement
-  inVocab: true
+  inVocab: false
   doc: "Indicates that a process requires a Dask cluster procured via [Dask Gateway](https://gateway.dask.org/) runtime."
   fields:
     class:
@@ -34,13 +34,13 @@ $graph:
         - 'cwl:Expression'
       doc: |
         Maximum number of bytes available for a dask worker.
-    coresMax:
+    clustermaxCore:
       type:
-        - 'string'
+        - 'int'
         - 'cwl:Expression'
       doc: |
         Maximum number of cores to configure the cluster
-    ramMax:
+    clusterMaxMemory:
       type:
         - 'string'
         - 'cwl:Expression'

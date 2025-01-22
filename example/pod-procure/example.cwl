@@ -14,8 +14,8 @@ requirements:
     workerCores: 2
     workerCoresLimit: "4GiB"
     workerMemory: 1073741824   # 1 GiB in bytes
-    #coresMax: "8"
-    #ramMax: "16Gi"
+    clustermaxCore: 8
+    clusterMaxMemory: "16Gi"
 
 inputs:
   post_event:
