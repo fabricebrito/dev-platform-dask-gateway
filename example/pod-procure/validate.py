@@ -22,16 +22,12 @@ def add_arv_hints():
         schema_content = f.read()
 
     for s in supported_versions:
-        print(s)
         use_custom_schema(s, "https://calrissian-cwl.github.io/schema", schema_content)
-        print(get_schema(s))
+        get_schema(s)
 
     cwltool.process.supportedProcessRequirements.extend([
         "https://calrissian-cwl.github.io/schema#DaskGatewayRequirement"
     ])
-
-    print(cwltool.process.SCHEMA_CACHE)
-    print(cwltool.process.supportedProcessRequirements)
 
 add_arv_hints()
 
