@@ -23,7 +23,7 @@ def add_arv_hints():
 
     for s in supported_versions:
         print(s)
-        use_custom_schema(s, "https://calrissian-cwl.github.io/schema#", schema_content)
+        use_custom_schema(s, "https://calrissian-cwl.github.io/schema", schema_content)
         print(get_schema(s))
 
     cwltool.process.supportedProcessRequirements.extend([
@@ -49,6 +49,7 @@ stream_err = StringIO()
 res = cwlmain(
     args=parsed_args,
     stdout=stream_out,
+    custom_schema_callback=add_arv_hints
 )
 
 print(stream_out.getvalue())
