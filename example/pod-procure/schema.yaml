@@ -24,13 +24,13 @@ $graph:
         Number of cpu-cores available for a dask worker.
     workerCoresLimit:
       type:
-        - 'string'
+        - 'int'
         - 'cwl:Expression'
       doc: |
         Maximum number of cpu-cores available for a dask worker.
     workerMemory:
       type:
-        - 'int'
+        - 'string'
         - 'cwl:Expression'
       doc: |
         Maximum number of bytes available for a dask worker.
